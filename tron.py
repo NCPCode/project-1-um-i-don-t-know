@@ -1,14 +1,12 @@
 import pygame
-from turtle import *
 
 class Player:
-	def __init__(self, color, coords, size, speed, playerTurtle):
+	def __init__(self, color, coords, size, speed):
 		self.color = color
 		self.initial_coords = list(coords)
 		self.coords = coords
 		self.size = size
 		self.speed = speed
-		self.playerTurtle = playerTurtle
 
 	def move(self, direction):
 		if direction == "up":
@@ -38,3 +36,4 @@ class Player:
 
     def reset(self):
     	self.coords = list(self.initial_coords)
+
