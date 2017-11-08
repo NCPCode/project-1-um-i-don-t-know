@@ -10,13 +10,13 @@ class Player:
 
 	def move(self, direction):
 		if direction == "up":
-			self.coords[1] -= speed
+			self.coords[1] -= self.speed
 		elif direction == "down":
-			self.coords[1] += speed
+			self.coords[1] += self.speed
 		elif direction == "right":
-			self.coords[0] += speed
+			self.coords[0] += self.speed
 		elif direction == "left":
-			self.coords[0] -= speed
+			self.coords[0] -= self.speed
 
 	def draw(self, window):
 		pygame.draw.rect(window, self.color, (self.coords, self.size))
@@ -37,7 +37,7 @@ class Player:
 	def reset(self):
 		self.coords = list(self.initial_coords)
 
-WINDOW_SIZE = [1000, 1000]
+WINDOW_SIZE = [100, 100]
 PLAYER_SIZE = [10, 10]
 player1 = Player(
 	pygame.Color("red"), 
@@ -53,31 +53,42 @@ player2 = Player(
 )
 window = pygame.display.set_mode(WINDOW_SIZE)
 clock = pygame.time.Clock()
-for event in pygame.event.get():
-	if event.type == pygame.QUIT:
-		exit()
-keys = pygame.key.get_pressed()
-if keys[pygame.K_RIGHT]:
-	player1.move('right')
-elif keys[pygame.K_LEFT]:
-	player1.move('left')
-if keys[pygame.K_UP]:
-	player1.move('up')
-elif keys[pygame.K_DOWN]:
-	player1.move('down')
+while True:
+	for event in pygame.event.get():
+		if event.type == pygame.QUIT:
+			exit()
+		keys = pygame.key.get_pressed()
+		if keys[pygame.K_RIGHT]:
+			player1.move('right')
+		elif keys[pygame.K_LEFT]:
+			player1.move('left')
+		if keys[pygame.K_UP]:
+			player1.move('up')
+		elif keys[pygame.K_DOWN]:
+			player1.move('down')
+		keys = pygame.key.get_pressed()
+		if keys[pygame.K_d]:
+			player2.move('right')
+		elif keys[pygame.K_a]:
+			player2.move('left')
+		if keys[pygame.K_w]:
+			player2.move('up')
+		elif keys[pygame.K_s]:
+			player2.move('down')
 
-player1.check_boundaries(WINDOW_SIZE)
-player2.check_boundaries(WINDOW_SIZE)
 
-if player1.has_collided(player2):
-	player1.reset()
-	player2.reset()
+	player1.check_boundaries(WINDOW_SIZE)
+	player2.check_boundaries(WINDOW_SIZE)
 
-window.fill(pygame.Color('white'))
+	if player1.has_collided(player2):
+		player1.reset()
+		player2.reset()
 
-player1.draw(window)
-player2.draw(window)
+	window.fill(pygame.Color('white'))
 
-pygame.display.update()
+	player1.draw(window)
+	player2.draw(window)
 
-clock.tick(60)
+	pygame.display.update()
+
+	clock.tick(60)
