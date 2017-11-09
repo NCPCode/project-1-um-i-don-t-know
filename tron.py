@@ -53,10 +53,13 @@ player2 = Player(
 )
 window = pygame.display.set_mode(WINDOW_SIZE)
 clock = pygame.time.Clock()
+window_string = ""
 while True:
 	for event in pygame.event.get():
 		if event.type == pygame.QUIT:
 			exit()
+		if window_string != "":
+			window = pygame.image.fromstring(window_string, WINDOW_SIZE, "RBG")
 		keys = pygame.key.get_pressed()
 		pygame.draw.rect(window, player1.color, (player1.coords, player1.size))
 		pygame.draw.rect(window, player2.color, (player2.coords, player2.size))
@@ -92,5 +95,6 @@ while True:
 	player2.draw(window)
 
 	pygame.display.update()
+	window_string = pygame.image.tostring(window, "RGB", False)
 
 	clock.tick(60)
