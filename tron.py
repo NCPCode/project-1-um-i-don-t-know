@@ -58,6 +58,8 @@ while True:
 		if event.type == pygame.QUIT:
 			exit()
 		keys = pygame.key.get_pressed()
+		pygame.draw.rect(window, player1.color, (player1.coords, player1.size))
+		pygame.draw.rect(window, player2.color, (player2.coords, player2.size))
 		if keys[pygame.K_RIGHT]:
 			player1.move('right')
 		elif keys[pygame.K_LEFT]:
