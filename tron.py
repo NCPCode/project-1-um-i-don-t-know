@@ -18,8 +18,10 @@ class Player:
 		elif direction == "left":
 			self.coords[0] -= self.speed
 
-	def draw(self, window):
+	def draw(self, window, trail):
 		pygame.draw.rect(window, self.color, (self.coords, self.size))
+		for coord in trail:
+			pygame.draw.rect(window, self.color, (coord, self.size))
 
 	def check_boundaries(self, screen_size):
 		for i in [0, 1]:
@@ -35,6 +37,7 @@ class Player:
 			(player.coords[1] < self.coords[1] + self.size[1]))
 
 	def reset(self):
+		window.fill(pygame.Color('white'))
 		self.coords = list(self.initial_coords)
 
 WINDOW_SIZE = [100, 100]
@@ -53,13 +56,14 @@ player2 = Player(
 )
 window = pygame.display.set_mode(WINDOW_SIZE)
 clock = pygame.time.Clock()
-window_string = ""
+trailplayer1 = []
+trailplayer2 = []
+window.fill(pygame.Color('white'))
+
 while True:
 	for event in pygame.event.get():
 		if event.type == pygame.QUIT:
 			exit()
-		if window_string != "":
-			window = load(game.jpeg)
 		keys = pygame.key.get_pressed()
 		pygame.draw.rect(window, player1.color, (player1.coords, player1.size))
 		pygame.draw.rect(window, player2.color, (player2.coords, player2.size))
@@ -71,6 +75,7 @@ while True:
 			player1.move('up')
 		elif keys[pygame.K_DOWN]:
 			player1.move('down')
+		trailplayer1.append(player1.coords)
 		keys = pygame.key.get_pressed()
 		if keys[pygame.K_d]:
 			player2.move('right')
@@ -80,6 +85,7 @@ while True:
 			player2.move('up')
 		elif keys[pygame.K_s]:
 			player2.move('down')
+		trailplayer2.append(player2.coords)
 
 
 	player1.check_boundaries(WINDOW_SIZE)
@@ -88,13 +94,13 @@ while True:
 	if player1.has_collided(player2):
 		player1.reset()
 		player2.reset()
+		trailplayer1 = []
+		trailplayer2 = []
 
-	window.fill(pygame.Color('white'))
 
-	player1.draw(window)
-	player2.draw(window)
+	player1.draw(window, trailplayer1)
+	player2.draw(window, trailplayer2)
 
 	pygame.display.update()
-	pygame.image.save(window, game.jpeg)
 
-	clock.tick(60)
+	clock.tick(6000)
