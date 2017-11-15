@@ -30,11 +30,16 @@ class Player:
 			elif self.coords[i] > screen_size[i] - self.size[i]:
 				self.coords[i] = screen_size[i] - self.size[i]
 
-	def has_collided(self, player):
-		return ((self.coords[0] < player.coords[0] + player.size[0]) and
-			(player.coords[0] < self.coords[0] + self.size[0]) and
-			(self.coords[1] < player.coords[1] + player.size[1]) and
-			(player.coords[1] < self.coords[1] + self.size[1]))
+	def has_collided(self, player, trailplayer1, trailplayer2):
+		collided = False
+		for coord1 in trailplayer2:
+			for coord2 in trailplayer1:
+				if ((coord1[0] < coord2[0] + player.size[0]) and
+			(coord2[0] < coord1[0] + self.size[0]) and
+			(coord1[1] < coord2[1] + player.size[1]) and
+			(coord2[1] < coord1[1] + self.size[1])):
+					collided = True
+		return collided
 
 	def reset(self):
 		window.fill(pygame.Color('white'))
@@ -59,7 +64,6 @@ clock = pygame.time.Clock()
 trailplayer1 = []
 trailplayer2 = []
 window.fill(pygame.Color('white'))
-
 while True:
 	for event in pygame.event.get():
 		if event.type == pygame.QUIT:
@@ -91,7 +95,7 @@ while True:
 	player1.check_boundaries(WINDOW_SIZE)
 	player2.check_boundaries(WINDOW_SIZE)
 
-	if player1.has_collided(player2):
+	if player1.has_collided(player2, trailplayer1, trailplayer2) or player2.has_collided(player1, trailplayer1, trailplayer2):
 		player1.reset()
 		player2.reset()
 		trailplayer1 = []
@@ -103,4 +107,4 @@ while True:
 
 	pygame.display.update()
 
-	clock.tick(6000)
+	clock.tick(60)
